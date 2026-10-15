@@ -1,0 +1,9 @@
+import { describe, it, expect } from 'vitest';
+import { serviceGroups } from '../lib/catalog';
+describe('Clyra service requirements',()=>{
+ it('offers all ten marketing specialisms',()=>{ expect(serviceGroups.find(g=>g.id==='marketing')?.items).toEqual(['Search Engine Optimization (SEO)', 'Social Media Marketing (SMM)', 'Paid Advertising (PPC / Paid Media)', 'Content Marketing', 'Email Marketing & Automation', 'Creative Design & Video Marketing', 'Website Design & Conversion Optimization', 'Influencer & Affiliate Marketing', 'Analytics & Marketing Strategy', 'Local & Reputation Marketing']); });
+ it('offers the five automation services',()=>{expect(serviceGroups.find(g=>g.id==='automation')?.items).toEqual(['Workflow Automation', 'CRM & Sales Automation', 'Email & Communication Automation', 'AI & Chatbot Automation', 'Finance & Accounting Automation']);});
+ it('offers the seven technology services',()=>{expect(serviceGroups.find(g=>g.id==='technology')?.items).toEqual(['Managed IT Services (MSP)', 'Website & E-commerce Solutions', 'Cloud Solutions & Microsoft 365', 'Business Process & AI Automation', 'Agriculture & IoT Technology', 'Business Software & Systems Integration', 'IT Consulting, Training & Digital Transformation']);});
+ it('keeps offshore specialisms distinct',()=>{expect(serviceGroups.find(g=>g.id==='offshore')?.items).toEqual(['Lead Generation & Sales Administration', 'Data Entry, Reporting & Analysis', 'CAD, Drafting & Design Support', 'Medical & Allied Health Administration', 'Procurement & Supply Chain Administration']);});
+ it('keeps onshore sectors distinct',()=>{expect(serviceGroups.find(g=>g.id==='onshore')?.items).toEqual(['Hospitality', 'Manufacturing', 'Engineering', 'Education', 'Automotive']);});
+});
