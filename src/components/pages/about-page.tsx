@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Activity, BarChart3, LayoutGrid, TrendingUp } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import ClientLogos from "@/components/client-logos";
 import { studioImage } from "@/lib/studio";
 
 const industries = [
@@ -143,6 +144,8 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      <ClientLogos intro={false} />
 
       <Expand id="industries" className="about-industries">
         <div className="about-expand-frame">

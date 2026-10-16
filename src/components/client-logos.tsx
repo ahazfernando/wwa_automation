@@ -9,22 +9,22 @@ const clients = [
   { src: "/clientlogo/MalibuCaravans.avif", alt: "Malibu Caravans" },
 ] as const;
 
-export default function ClientLogos() {
+export default function ClientLogos({ intro = true }: { intro?: boolean }) {
   return (
-    <section className="clients" aria-label="Client logo showcase">
-      <div className="clients-inner">
-        <div className="clients-head">
-          <div>
+    <section className={`clients${intro ? "" : " clients-marquee-only"}`} aria-label="Client logo showcase">
+      {intro ? (
+        <div className="clients-inner">
+          <div className="clients-head">
             <span className="stories-badge">Our client community</span>
             <h2>
               Good company.
               <br />
               Great possibilities.
             </h2>
+            <p>Organisations we partner with, from local operators to national brands.</p>
           </div>
-          <p>Organisations we partner with, from local operators to national brands.</p>
         </div>
-      </div>
+      ) : null}
       <div className="clients-marquee" aria-hidden="true">
         <div className="clients-track">
           {[0, 1].map((copy) => (

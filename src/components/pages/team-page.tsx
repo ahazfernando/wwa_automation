@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Compass, Code2, Users, ArrowUpRight } from "lucide-react";
+import PartnerPeople from "@/components/partner-people";
 import { Button } from "@/components/ui/button";
 import { studioImage } from "@/lib/studio";
 
@@ -45,8 +46,7 @@ export default function TeamPage() {
           </div>
           <p>
             Our strength is how we work together. Business understanding, technical expertise, and creative thinking
-            come together around your goals. Team member profiles will be added when the Clyra team details are
-            confirmed.
+            come together around your goals.
           </p>
         </section>
         <div className="team-grid">
@@ -58,6 +58,9 @@ export default function TeamPage() {
             </article>
           ))}
         </div>
+      </div>
+      <PartnerPeople />
+      <div className="section-inner">
         <section className="team-banner">
           <span className="eyebrow">GROW WITH US</span>
           <h2>Good people make great things happen.</h2>

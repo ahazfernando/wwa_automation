@@ -13,11 +13,11 @@ export default function HomePage() {
       <ClientStories />
       <ClientLogos />
       <ContactCTA />
-      <section className="values-section">
-        <div className="section-inner">
-          <div className="section-heading">
+      <section className="values-section" aria-label="The Clyra Difference">
+        <div className="values-inner">
+          <div className="values-head">
             <div>
-              <span className="eyebrow">THE CLYRA DIFFERENCE</span>
+              <span className="stories-badge">The Clyra Difference</span>
               <h2>
                 More than a service.
                 <br />

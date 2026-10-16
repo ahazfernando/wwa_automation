@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import PageSkeleton from "@/components/page-skeleton";
 import ContactPage from "@/components/pages/contact-page";
 import { pageMetadata } from "@/lib/metadata";
 
@@ -9,7 +10,7 @@ export const metadata = pageMetadata(
 
 export default function Page() {
   return (
-    <Suspense>
+    <Suspense fallback={<PageSkeleton variant="contact" />}>
       <ContactPage />
     </Suspense>
   );

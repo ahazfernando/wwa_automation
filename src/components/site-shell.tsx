@@ -41,6 +41,7 @@ const serviceMenu = [
     label: "IT Solutions",
     title: ["Technology", "& Software"],
     body: "Technology that works for you. Thoughtfully designed websites, connected business systems, and IT solutions built for what comes next.",
+    image: "/assets/PROCESSAUTOMATION.png",
   },
 ] as const;
 
@@ -164,7 +165,7 @@ export function Header() {
               </div>
               <div
                 className={
-                  featured.id === "marketing" || featured.id === "staffing"
+                  featured.id === "marketing" || featured.id === "staffing" || featured.id === "technology"
                     ? `services-menu-feature is-${featured.id}`
                     : "services-menu-feature"
                 }
@@ -189,7 +190,9 @@ export function Header() {
                   className={
                     "image" in featured
                       ? `services-menu-art is-image${
-                          featured.id === "marketing" || featured.id === "staffing" ? ` is-${featured.id}` : ""
+                          featured.id === "marketing" || featured.id === "staffing" || featured.id === "technology"
+                            ? ` is-${featured.id}`
+                            : ""
                         }`
                       : "services-menu-art"
                   }
