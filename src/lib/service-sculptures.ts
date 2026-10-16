@@ -27,7 +27,7 @@ function path(kind: SculptureKind, band: number, t: number): Point {
     return [x + r * Math.cos(t), y + .67 * Math.sin(t), .28 * Math.sin(t * 2 + column) + (row - .5) * .22];
   }
   if (kind === 'marketing') {
-    // An expanding, directional signal vortex — growth in three dimensions.
+    // An expanding, directional signal vortex: growth in three dimensions.
     const r = .38 + band * .18;
     return [r * Math.cos(t), r * Math.sin(t) + .18 * Math.sin(t * 2), (band - 2.5) * .15 + .32 * Math.cos(t + band * .25)];
   }

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Activity, BarChart3, LayoutGrid, TrendingUp } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { studioImage } from "@/lib/studio";
 
@@ -18,7 +19,7 @@ const industries = [
   {
     name: "Engineering",
     text: "Precision work, project delivery, and the tools teams rely on daily.",
-    image: "/assets/industry-engineering.jpg",
+    image: "/assets/25%202.png",
   },
   {
     name: "Education",
@@ -33,10 +34,26 @@ const industries = [
 ] as const;
 
 const differences = [
-  ["End-to-End Expertise", "Strategy, technology, and people. Connected from the first conversation to the final delivery."],
-  ["Proven Results", "Clear goals and thoughtful execution, with outcomes you can see in the work."],
-  ["Tailored Approach", "Your challenges are unique. Your solution should be too."],
-  ["Long-Term Partnership", "A team that stays curious, takes ownership, and grows alongside you."],
+  {
+    title: "End-to-End Expertise",
+    text: "Strategy, technology, and people. Connected from the first conversation to the final delivery.",
+    Icon: BarChart3,
+  },
+  {
+    title: "Proven Results",
+    text: "Clear goals and thoughtful execution, with outcomes you can see in the work.",
+    Icon: LayoutGrid,
+  },
+  {
+    title: "Tailored Approach",
+    text: "Your challenges are unique. Your solution should be too.",
+    Icon: TrendingUp,
+  },
+  {
+    title: "Long-Term Partnership",
+    text: "A team that stays curious, takes ownership, and grows alongside you.",
+    Icon: Activity,
+  },
 ] as const;
 
 const milestones = [
@@ -61,7 +78,7 @@ function useExpand<T extends HTMLElement>() {
     }
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) setOpen(true);
+        if (entry?.isIntersecting) setOpen(true);
       },
       { threshold: 0.32, rootMargin: "0px 0px -8% 0px" },
     );
@@ -129,13 +146,31 @@ export default function AboutPage() {
 
       <Expand id="industries" className="about-industries">
         <div className="about-expand-frame">
-          <header className="about-center">
-            <h2>Industries We Serve</h2>
-            <p>Different sectors. The same need for people, process, and technology to work as one.</p>
+          <header className="industries-head">
+            <span className="industries-kicker">Industries</span>
+            <div className="industries-head-row">
+              <h2>
+                Industries we serve,
+                <br />
+                expertise that travels.
+              </h2>
+              <div className="industries-head-aside">
+                <p>
+                  Different sectors. The same need for people, process, and technology to work as one, so every
+                  team moves with clarity and confidence.
+                </p>
+                <Link href="/contact" className="industries-head-cta">
+                  Talk to us
+                </Link>
+              </div>
+            </div>
           </header>
           <ul className="industry-cards">
             {industries.map((industry) => (
-              <li className="industry-card" key={industry.name}>
+              <li
+                className={industry.name === "Engineering" ? "industry-card is-engineering" : "industry-card"}
+                key={industry.name}
+              >
                 <div className="industry-card-copy">
                   <h3>{industry.name}</h3>
                   <p>{industry.text}</p>
@@ -216,16 +251,33 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="about-difference">
-        <div className="about-expand-frame">
-          <header className="about-center">
-            <h2>What Makes Us Different</h2>
-            <p>Four ways the work stays connected, from the first brief to the long relationship.</p>
+      <section className="about-difference" aria-label="What makes us different">
+        <div className="difference-inner">
+          <header className="difference-head">
+            <div>
+              <span className="difference-kicker">What makes us different</span>
+              <h2>
+                Four ways the
+                <br />
+                <span>work stays connected.</span>
+              </h2>
+            </div>
+            <div className="difference-head-aside">
+              <p>
+                From the first brief to the long relationship, these are the principles that keep strategy, technology,
+                and people moving as one.
+              </p>
+              <Link href="/contact" className="difference-cta">
+                Talk to us
+              </Link>
+            </div>
           </header>
-          <ol className="difference-grid">
-            {differences.map(([title, text], index) => (
+          <ol className="difference-rail">
+            {differences.map(({ title, text, Icon }) => (
               <li key={title}>
-                <span>{index + 1}</span>
+                <span className="difference-icon" aria-hidden="true">
+                  <Icon strokeWidth={1.8} />
+                </span>
                 <h3>{title}</h3>
                 <p>{text}</p>
               </li>

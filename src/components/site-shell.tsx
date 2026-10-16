@@ -34,6 +34,7 @@ const serviceMenu = [
     label: "Onshore & Offshore Staffing",
     title: ["Onshore & Offshore", "Staffing"],
     body: "Great work starts with great people. Build a capable, connected team with specialist talent, wherever your business needs it.",
+    image: "/assets/Purple%20checklist%20scroll%20and%20donut%20chart%201.png",
   },
   {
     id: "technology",
@@ -161,7 +162,13 @@ export function Header() {
                   </Link>
                 ))}
               </div>
-              <div className={featured.id === "marketing" ? "services-menu-feature is-marketing" : "services-menu-feature"}>
+              <div
+                className={
+                  featured.id === "marketing" || featured.id === "staffing"
+                    ? `services-menu-feature is-${featured.id}`
+                    : "services-menu-feature"
+                }
+              >
                 <span className="services-menu-kicker">Services</span>
                 <h2>
                   <span>{featured.title[0]}</span>
@@ -181,7 +188,9 @@ export function Header() {
                 <div
                   className={
                     "image" in featured
-                      ? `services-menu-art is-image${featured.id === "marketing" ? " is-marketing" : ""}`
+                      ? `services-menu-art is-image${
+                          featured.id === "marketing" || featured.id === "staffing" ? ` is-${featured.id}` : ""
+                        }`
                       : "services-menu-art"
                   }
                   aria-hidden="true"

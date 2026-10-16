@@ -6,10 +6,19 @@ import type { SculpturePalette } from './service-sculpture-canvas';
 type SceneProps = { palette: SculpturePalette; host: HTMLElement };
 
 class SceneBoundary extends Component<{ children: ReactNode; host: HTMLElement }, { failed: boolean }> {
-  state = { failed: false };
-  static override getDerivedStateFromError() { return { failed: true }; }
-  override componentDidCatch() { this.props.host.dataset['unavailable'] = 'true'; }
-  override render() { return this.state.failed ? null : this.props.children; }
+  override state: { failed: boolean } = { failed: false };
+
+  static getDerivedStateFromError(): { failed: boolean } {
+    return { failed: true };
+  }
+
+  override componentDidCatch() {
+    this.props.host.dataset['unavailable'] = 'true';
+  }
+
+  override render() {
+    return this.state.failed ? null : this.props.children;
+  }
 }
 export default function OrbScene() {
   const host = useRef<HTMLDivElement>(null);

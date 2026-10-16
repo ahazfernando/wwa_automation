@@ -135,7 +135,8 @@ export function sectionSettleProgress(progress: number, direction: -1 | 0 | 1) {
 
   let prevIndex = 0;
   for (let index = 0; index < points.length; index += 1) {
-    if (points[index] <= clamped + 0.0001) prevIndex = index;
+    const point = points[index];
+    if (point !== undefined && point <= clamped + 0.0001) prevIndex = index;
   }
   const nextIndex = Math.min(points.length - 1, prevIndex + 1);
   const prev = points[prevIndex] ?? 0;
@@ -156,7 +157,8 @@ export function sectionSettleProgress(progress: number, direction: -1 | 0 | 1) {
 export function sectionIndexForFrame(frame: number) {
   let index = 0;
   for (let i = 0; i < tunnelStages.length; i += 1) {
-    if (frame >= tunnelStages[i].from) index = i;
+    const stage = tunnelStages[i];
+    if (stage && frame >= stage.from) index = i;
   }
   return index;
 }

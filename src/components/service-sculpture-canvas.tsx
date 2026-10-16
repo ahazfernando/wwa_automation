@@ -12,9 +12,15 @@ import { MacBookObject, WorkflowObject } from './workflow-and-laptop';
 export interface SculpturePalette { jade: string; silver: string; copper: string; light: string; shadow: string; }
 
 class ModelBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
-  state = { failed: false };
-  static override getDerivedStateFromError() { return { failed: true }; }
-  override render() { return this.state.failed ? null : this.props.children; }
+  override state: { failed: boolean } = { failed: false };
+
+  static getDerivedStateFromError(): { failed: boolean } {
+    return { failed: true };
+  }
+
+  override render() {
+    return this.state.failed ? null : this.props.children;
+  }
 }
 const descriptions: Record<SculptureKind, string> = { strategy: 'Polished interwoven strategy ribbons', ...Object.fromEntries(Object.entries(serviceObjects).map(([key, value]) => [key, value.description])) } as Record<SculptureKind, string>;
 function Sculpture({ palette, host }: { palette: SculpturePalette; host: HTMLElement }) {
