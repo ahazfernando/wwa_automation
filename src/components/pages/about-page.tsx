@@ -1,92 +1,238 @@
-import { Building2, Cpu, Coffee, Settings } from "lucide-react";
-import { advantages } from "@/lib/catalog";
-import { ContactCTA } from "@/components/site-shell";
+"use client";
+
+import Link from "next/link";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { studioImage } from "@/lib/studio";
 
 const industries = [
-  [Building2, "Real Estate"],
-  [Cpu, "Technology & Startups"],
-  [Coffee, "Hospitality"],
-  [Settings, "Facility Solutions"],
+  {
+    name: "Hospitality",
+    text: "Guest experience, staffing, and the operations behind every memorable stay.",
+    image: "/assets/industry-hospitality.jpg",
+  },
+  {
+    name: "Manufacturing",
+    text: "Production lines, supply chains, and systems that keep output moving.",
+    image: "/assets/industry-manufacturing.jpg",
+  },
+  {
+    name: "Engineering",
+    text: "Precision work, project delivery, and the tools teams rely on daily.",
+    image: "/assets/industry-engineering.jpg",
+  },
+  {
+    name: "Education",
+    text: "Learning environments, administration, and connected campus operations.",
+    image: "/assets/industry-education.jpg",
+  },
+  {
+    name: "Automotive",
+    text: "Dealerships, service networks, and the systems behind every journey.",
+    image: "/assets/industry-automotive.jpg",
+  },
 ] as const;
+
+const differences = [
+  ["End-to-End Expertise", "Strategy, technology, and people. Connected from the first conversation to the final delivery."],
+  ["Proven Results", "Clear goals and thoughtful execution, with outcomes you can see in the work."],
+  ["Tailored Approach", "Your challenges are unique. Your solution should be too."],
+  ["Long-Term Partnership", "A team that stays curious, takes ownership, and grows alongside you."],
+] as const;
+
+const milestones = [
+  { title: "Event", lane: "above", at: 8 },
+  { title: "Event", lane: "below", at: 18 },
+  { title: "Event", lane: "below", at: 38 },
+  { title: "Event", lane: "above", at: 62 },
+  { title: "Event", lane: "below", at: 76 },
+  { title: "Event", lane: "above", at: 88 },
+] as const;
+
+function useExpand<T extends HTMLElement>() {
+  const ref = useRef<T>(null);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setOpen(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setOpen(true);
+      },
+      { threshold: 0.32, rootMargin: "0px 0px -8% 0px" },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  return { ref, open };
+}
+
+function Expand({
+  children,
+  className,
+  id,
+}: {
+  children: ReactNode;
+  className?: string;
+  id?: string;
+}) {
+  const { ref, open } = useExpand<HTMLElement>();
+  return (
+    <section id={id} ref={ref} className={open ? `about-expand is-open ${className ?? ""}` : `about-expand ${className ?? ""}`}>
+      {children}
+    </section>
+  );
+}
 
 export default function AboutPage() {
   return (
-    <>
-      <section className="page-intro">
-        <span className="eyebrow">MEET CLYRA</span>
-        <h1>
-          We turn business challenges
-          <br />
-          into opportunities.
-        </h1>
-        <p>
-          Great ideas deserve great execution. We bring the right expertise together to help your business work
-          smarter, connect better, and move forward.
-        </p>
+    <div className="about-page">
+      <section className="about-hero" aria-label="About Clyra">
+        <video
+          className="about-hero-video"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+        >
+          <source src="/assets/1a83a13d9849c82d0eecdd8ff5c82086_720w.mp4" type="video/mp4" />
+        </video>
+        <div className="about-hero-shade" aria-hidden="true" />
+        <div className="about-hero-copy">
+          <span className="hero-badge">Global Excellence</span>
+          <h1>
+            We Turn Business
+            <br />
+            Challenges Into Opportunities
+          </h1>
+          <p>
+            Great ideas deserve great execution. We bring the right expertise together to help your business work
+            smarter, connect better, and move forward.
+          </p>
+          <div className="hero-actions">
+            <Link href="/contact" className="tunnel-btn">
+              Transform your Business
+            </Link>
+            <a href="#industries" className="tunnel-btn is-secondary">
+              Industry Expertise
+            </a>
+          </div>
+        </div>
       </section>
-      <img
-        src={studioImage}
-        width={1536}
-        height={1024}
-        alt="A bright, collaborative workspace with plants and a shared meeting table"
-        className="about-cover"
-      />
-      <div className="section-inner">
-        <section className="about-story">
-          <div>
-            <span className="eyebrow">OUR MISSION</span>
-            <h2>Make progress practical.</h2>
-            <p>
-              To help ambitious businesses turn their goals into action through clear strategy, thoughtful
-              technology, and people who care about the outcome.
-            </p>
-          </div>
-          <div>
-            <span className="eyebrow">OUR VISION</span>
-            <h2>Better business, connected.</h2>
-            <p>
-              A future where people, processes, and technology work together seamlessly, giving every business the
-              confidence and capability to grow.
-            </p>
-          </div>
-        </section>
-        <div className="section-heading">
-          <div>
-            <span className="eyebrow">INDUSTRY EXPERTISE</span>
-            <h2>
-              Different industries.
-              <br />
-              Shared possibilities.
-            </h2>
+
+      <Expand id="industries" className="about-industries">
+        <div className="about-expand-frame">
+          <header className="about-center">
+            <h2>Industries We Serve</h2>
+            <p>Different sectors. The same need for people, process, and technology to work as one.</p>
+          </header>
+          <ul className="industry-cards">
+            {industries.map((industry) => (
+              <li className="industry-card" key={industry.name}>
+                <div className="industry-card-copy">
+                  <h3>{industry.name}</h3>
+                  <p>{industry.text}</p>
+                </div>
+                <img src={industry.image} alt="" />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Expand>
+
+      <Expand className="about-purpose">
+        <div className="about-expand-frame">
+          <div className="purpose-grid">
+            <figure className="purpose-panel">
+              <img src={studioImage} alt="" style={{ objectPosition: "18% center" }} />
+            </figure>
+            <article className="purpose-panel">
+              <img src={studioImage} alt="" style={{ objectPosition: "50% center" }} />
+              <div>
+                <h2>Our Mission</h2>
+                <p>
+                  To help ambitious businesses turn their goals into action through clear strategy, thoughtful
+                  technology, and people who care about the outcome.
+                </p>
+              </div>
+            </article>
+            <article className="purpose-panel">
+              <img src={studioImage} alt="" style={{ objectPosition: "82% center" }} />
+              <div>
+                <h2>Our Vision</h2>
+                <p>
+                  A future where people, processes, and technology work together, giving every business the confidence
+                  and capability to grow.
+                </p>
+              </div>
+            </article>
           </div>
         </div>
-        <div className="industry-grid">
-          {industries.map(([Icon, name]) => (
-            <div key={name}>
-              <Icon />
-              <h3>{name}</h3>
-            </div>
-          ))}
-        </div>
-      </div>
-      <section className="values-section">
-        <div className="section-inner">
-          <div className="section-heading">
-            <h2>What makes us different.</h2>
+      </Expand>
+
+      <section className="about-milestones">
+        <header className="about-center">
+          <h2>Milestones Along the Way</h2>
+          <p>The path behind the work, and the point we are building from today.</p>
+        </header>
+        <div className="milestone-board">
+          <div className="milestone-lane is-above">
+            {milestones
+              .filter((item) => item.lane === "above")
+              .map((item) => (
+                <div key={`${item.lane}-${item.at}`} className="milestone-card" style={{ left: `${item.at}%` }}>
+                  {item.title}
+                </div>
+              ))}
           </div>
-          <div className="values-grid">
-            {advantages.map(([title, text], index) => (
-              <div className="value-item" key={title}>
-                <span>0{index + 1}</span>
+          <div className="milestone-axis" aria-hidden="true">
+            <span>Today</span>
+          </div>
+          <div className="milestone-lane is-below">
+            {milestones
+              .filter((item) => item.lane === "below")
+              .map((item) => (
+                <div key={`${item.lane}-${item.at}`} className="milestone-card" style={{ left: `${item.at}%` }}>
+                  {item.title}
+                </div>
+              ))}
+          </div>
+          <ol className="milestone-list">
+            {milestones.slice(0, 3).map((item) => (
+              <li key={`before-${item.at}`}>{item.title}</li>
+            ))}
+            <li className="is-today">Today</li>
+            {milestones.slice(3).map((item) => (
+              <li key={`after-${item.at}`}>{item.title}</li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="about-difference">
+        <div className="about-expand-frame">
+          <header className="about-center">
+            <h2>What Makes Us Different</h2>
+            <p>Four ways the work stays connected, from the first brief to the long relationship.</p>
+          </header>
+          <ol className="difference-grid">
+            {differences.map(([title, text], index) => (
+              <li key={title}>
+                <span>{index + 1}</span>
                 <h3>{title}</h3>
                 <p>{text}</p>
-              </div>
+              </li>
             ))}
-          </div>
+          </ol>
         </div>
       </section>
-      <ContactCTA />
-    </>
+    </div>
   );
 }

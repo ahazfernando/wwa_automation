@@ -2,108 +2,157 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { ArrowUpRight, Workflow, ChartNoAxesCombined, Monitor, Users, MapPin } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { ContactCTA } from "@/components/site-shell";
-import { serviceGroups } from "@/lib/catalog";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { ArrowUpRight, Star } from "lucide-react";
+import ClientStories from "@/components/client-stories";
+import { servicePageFor, serviceReasons, type ServiceMedia } from "@/lib/service-pages";
 
-const icons = [Workflow, ChartNoAxesCombined, Monitor, Users, MapPin];
+function useReveal<T extends HTMLElement>() {
+  const ref = useRef<T>(null);
+  const [open, setOpen] = useState(false);
 
-const staffingGroups = serviceGroups.filter((group) => group.id === "offshore" || group.id === "onshore");
-const serviceTabs = [
-  ...serviceGroups.filter((group) => group.id !== "offshore" && group.id !== "onshore"),
-  { id: "staffing", short: "Onshore & offshore staffing" },
-];
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setOpen(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) setOpen(true);
+      },
+      { threshold: 0.28, rootMargin: "0px 0px -6% 0px" },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  return { ref, open };
+}
+
+function Reveal({ children, className }: { children: ReactNode; className?: string }) {
+  const { ref, open } = useReveal<HTMLDivElement>();
+  return (
+    <div ref={ref} className={open ? `service-reveal is-open ${className ?? ""}` : `service-reveal ${className ?? ""}`}>
+      {children}
+    </div>
+  );
+}
+
+function Frame({ image, className }: { image: ServiceMedia; className?: string }) {
+  return (
+    <figure className={className ? `service-frame ${className}` : "service-frame"}>
+      <img src={image.src} alt="" style={{ objectPosition: image.position }} />
+    </figure>
+  );
+}
 
 export default function ServicesPage() {
   const searchParams = useSearchParams();
-  const requested = searchParams.get("category");
-  const staffing = requested === "staffing" || requested === "offshore" || requested === "onshore";
-  const category = serviceGroups.some((group) => group.id === requested) ? requested : "automation";
-  const selected = serviceGroups.find((group) => group.id === category) ?? serviceGroups[0];
-  const index = serviceGroups.findIndex((group) => group.id === selected.id);
-  const Icon = icons[index] ?? Workflow;
+  const page = servicePageFor(searchParams.get("category"));
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [page.id]);
 
   return (
-    <>
-      <section className="page-intro centered">
-        <span className="eyebrow">CONNECTED EXPERTISE</span>
-        <h1>
-          Services that move
-          <br />
-          your business forward.
-        </h1>
-        <p>
-          From smarter operations to stronger connections, find the expertise you need to turn your next challenge
-          into your next opportunity.
-        </p>
-      </section>
-      <section className="catalog-section">
-        <div className="section-inner">
-          <nav className="category-tabs" aria-label="Service categories">
-            {serviceTabs.map((group) => (
-              <Button key={group.id} variant={(staffing ? group.id === "staffing" : group.id === category) ? "default" : "outline"} asChild>
-                <Link
-                  href={`/services?category=${group.id}`}
-                  aria-current={(staffing ? group.id === "staffing" : group.id === category) ? "page" : undefined}
-                >
-                  {group.short}
-                </Link>
-              </Button>
-            ))}
-          </nav>
-          {staffing ? (
-            <>
-              <div className="catalog-title">
-                <h2>Onshore & Offshore Staffing</h2>
-                <p>Great work starts with great people. Build a capable, connected team with specialist talent, wherever your business needs it.</p>
+    <div className="service-landing" key={page.id}>
+      <section
+        className={page.heroImage ? "service-hero is-photo" : "service-hero"}
+        style={page.heroImage ? { backgroundImage: `url("${page.heroImage}")` } : undefined}
+      >
+        <div className="service-hero-copy">
+          <span className="hero-badge">{page.badge}</span>
+          <h1>{page.headline}</h1>
+          <p>{page.intro}</p>
+          {page.heroImage ? (
+            <div className="hero-actions">
+              <Link href="/team" className="tunnel-btn">
+                Meet Our Team
+              </Link>
+              <Link href={page.advantageHref} className="tunnel-btn is-secondary">
+                Contact Us
+              </Link>
+            </div>
+          ) : null}
+        </div>
+        {page.heroImage ? null : (
+          <Reveal className="service-stage">
+            <div className="service-collage">
+              <Frame image={page.collage[0]} className="is-lead" />
+              <div className="service-collage-stack">
+                <Frame image={page.collage[1]} />
+                <Frame image={page.collage[2]} />
               </div>
-              {staffingGroups.map((group) => {
-                const GroupIcon = icons[serviceGroups.findIndex((item) => item.id === group.id)] ?? Users;
-                return (
-                  <div key={group.id}>
-                    <h3 className="staffing-group-title">{group.name}</h3>
-                    <div className="service-grid">
-                      {group.items.map((item) => (
-                        <article className="service-card" key={item}>
-                          <GroupIcon />
-                          <h3>{item}</h3>
-                          <Button variant="link" asChild>
-                            <Link href={`/contact?service=${encodeURIComponent(item)}`}>
-                              Let’s discuss <ArrowUpRight />
-                            </Link>
-                          </Button>
-                        </article>
-                      ))}
-                    </div>
-                  </div>
-                );
-              })}
-            </>
-          ) : (
-            <>
-              <div className="catalog-title">
-                <h2>{selected.name}</h2>
-                <p>{selected.description}</p>
-              </div>
-              <div className="service-grid">
-                {selected.items.map((item) => (
-                  <article className="service-card" key={item}>
-                    <Icon />
-                    <h3>{item}</h3>
-                    <Button variant="link" asChild>
-                      <Link href={`/contact?service=${encodeURIComponent(item)}`}>
-                        Let’s discuss <ArrowUpRight />
-                      </Link>
-                    </Button>
-                  </article>
-                ))}
-              </div>
-            </>
-          )}
+            </div>
+          </Reveal>
+        )}
+        <div className={page.heroImage ? "service-hero-foot" : undefined}>
+          <div className="service-rating">
+            <div className="service-stars" aria-label="5 out of 5 stars">
+              {Array.from({ length: 5 }, (_, star) => (
+                <Star key={star} strokeWidth={0} aria-hidden="true" />
+              ))}
+            </div>
+            <strong>25 + Reviews</strong>
+          </div>
+          <p className="sample-note">Sample rating · client reviews to be confirmed</p>
         </div>
       </section>
-      <ContactCTA />
-    </>
+
+      <div className="service-bands">
+        {page.bands.map((band, index) => (
+          <article key={band.title} className={index % 2 === 1 ? "service-band is-reverse" : "service-band"}>
+            <Reveal>
+              <Frame image={band.image} />
+            </Reveal>
+            <div className="service-band-copy">
+              <span className="service-kicker">{band.eyebrow}</span>
+              <h2>{band.title}</h2>
+              <p>{band.text}</p>
+              <Link href={band.href} className="service-band-link">
+                {band.cta} <ArrowUpRight aria-hidden="true" />
+              </Link>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <section className="service-advantage">
+        <span className="hero-badge">{page.advantageKicker}</span>
+        <h2>{page.advantageTitle}</h2>
+        <div className="hero-actions">
+          <Link href="/team" className="tunnel-btn">
+            Meet Our Team
+          </Link>
+          <Link href={page.advantageHref} className="tunnel-btn is-secondary">
+            Contact Us
+          </Link>
+        </div>
+        <Reveal className="service-stage service-advantage-reveal">
+          <Frame image={page.advantageImage} className="is-wide" />
+        </Reveal>
+      </section>
+
+      <section className="service-why">
+        <header className="service-why-copy">
+          <span className="hero-badge">Why Choose Us</span>
+          <h2>{page.whyTitle}</h2>
+          <p>{page.whyText}</p>
+        </header>
+        <ol className="service-why-grid">
+          {serviceReasons.map(([title, text], index) => (
+            <li key={title}>
+              <span>{index + 1}</span>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <ClientStories />
+    </div>
   );
 }

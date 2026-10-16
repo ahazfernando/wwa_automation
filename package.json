@@ -12,6 +12,12 @@
     "test": "vitest run",
     "test:watch": "vitest"
   },
+  "vitest": {
+    "environment": "jsdom",
+    "setupFiles": [
+      "./src/test/setup.ts"
+    ]
+  },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-accordion": "^1.2.12",
@@ -75,7 +81,6 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@types/three": "^0.186.0",
-    "@vitejs/plugin-react": "^5.2.0",
     "eslint": "^9.32.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.6",

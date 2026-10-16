@@ -26,7 +26,8 @@ const serviceMenu = [
     id: "marketing",
     label: "Digital Marketing",
     title: ["Digital", "Marketing"],
-    body: "Be seen by the right people. From your first impression to your next conversion, we turn your brand’s potential into meaningful growth.",
+    body: "Be seen by the right people.",
+    image: "/assets/Purple%20billboard%20trio%20with%20preserved%20branding.png",
   },
   {
     id: "staffing",
@@ -160,7 +161,7 @@ export function Header() {
                   </Link>
                 ))}
               </div>
-              <div className={featured.id === "automation" ? "services-menu-feature is-automation" : "services-menu-feature"}>
+              <div className={featured.id === "marketing" ? "services-menu-feature is-marketing" : "services-menu-feature"}>
                 <span className="services-menu-kicker">Services</span>
                 <h2>
                   <span>{featured.title[0]}</span>
@@ -177,7 +178,14 @@ export function Header() {
                 >
                   View service
                 </Link>
-                <div className={"image" in featured ? "services-menu-art is-image" : "services-menu-art"} aria-hidden="true">
+                <div
+                  className={
+                    "image" in featured
+                      ? `services-menu-art is-image${featured.id === "marketing" ? " is-marketing" : ""}`
+                      : "services-menu-art"
+                  }
+                  aria-hidden="true"
+                >
                   {"image" in featured ? (
                     <img src={featured.image} alt="" />
                   ) : (
@@ -275,7 +283,7 @@ export function Footer() {
       </div>
       <div className="footer-main">
         <div>
-          <Brand />
+          <Brand logo />
           <p>
             Smart strategy. Thoughtful technology.
             <br />
@@ -310,7 +318,7 @@ export function Footer() {
         </div>
       </div>
       <div className="footer-bottom">
-        <span>© {new Date().getFullYear()} Clyra. All rights reserved.</span>
+        <span>© {new Date().getFullYear()} We Will Australia. All rights reserved.</span>
         <span>Strategy. Technology. People.</span>
       </div>
     </footer>

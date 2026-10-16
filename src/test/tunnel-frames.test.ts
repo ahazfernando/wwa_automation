@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { sectionSettleProgress, sectionSnapProgress } from "@/lib/tunnel-frames";
+import { sectionSettleProgress, sectionSnapProgress } from "../lib/tunnel-frames";
 
 describe("section settle", () => {
   it("finishes a downward scroll on the next full section", () => {
