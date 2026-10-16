@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { ArrowUpRight, Star } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Star } from "lucide-react";
 import ClientStories from "@/components/client-stories";
 import { servicePageFor, serviceReasons, type ServiceMedia } from "@/lib/service-pages";
 
@@ -51,10 +51,19 @@ function Frame({ image, className }: { image: ServiceMedia; className?: string }
 export default function ServicesPage() {
   const searchParams = useSearchParams();
   const page = servicePageFor(searchParams.get("category"));
+  const railRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [page.id]);
+
+  const scrollRail = (direction: -1 | 1) => {
+    const rail = railRef.current;
+    if (!rail) return;
+    const card = rail.querySelector<HTMLElement>(".service-offer");
+    const step = card ? card.offsetWidth + 20 : 340;
+    rail.scrollBy({ left: direction * step, behavior: "smooth" });
+  };
 
   return (
     <div className="service-landing" key={page.id}>
@@ -101,23 +110,41 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <div className="service-bands">
-        {page.bands.map((band, index) => (
-          <article key={band.title} className={index % 2 === 1 ? "service-band is-reverse" : "service-band"}>
-            <Reveal>
-              <Frame image={band.image} />
-            </Reveal>
-            <div className="service-band-copy">
-              <span className="service-kicker">{band.eyebrow}</span>
-              <h2>{band.title}</h2>
-              <p>{band.text}</p>
-              <Link href={band.href} className="service-band-link">
-                {band.cta} <ArrowUpRight aria-hidden="true" />
-              </Link>
-            </div>
-          </article>
-        ))}
-      </div>
+      <section className="service-rail" aria-label="Service offerings">
+        <div className="service-rail-head">
+          <div>
+            <span className="service-kicker">{page.badge}</span>
+            <h2>What we can take on for you.</h2>
+          </div>
+          <div className="service-rail-nav" aria-hidden={page.bands.length < 2}>
+            <button type="button" className="service-rail-btn" aria-label="Previous services" onClick={() => scrollRail(-1)}>
+              <ArrowLeft aria-hidden="true" />
+            </button>
+            <button type="button" className="service-rail-btn" aria-label="Next services" onClick={() => scrollRail(1)}>
+              <ArrowRight aria-hidden="true" />
+            </button>
+          </div>
+        </div>
+        <div className="service-rail-viewport" ref={railRef}>
+          <div className="service-rail-track">
+            {page.bands.map((band) => (
+              <article className="service-offer" key={band.title}>
+                <div className="service-offer-media">
+                  <img src={band.image.src} alt="" style={{ objectPosition: band.image.position }} />
+                </div>
+                <div className="service-offer-body">
+                  <span className="service-offer-kicker">{band.eyebrow}</span>
+                  <h3>{band.title}</h3>
+                  <p>{band.text}</p>
+                  <Link href={band.href} className="service-offer-cta">
+                    {band.cta} <ArrowUpRight aria-hidden="true" />
+                  </Link>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section className="service-advantage">
         <span className="hero-badge">{page.advantageKicker}</span>

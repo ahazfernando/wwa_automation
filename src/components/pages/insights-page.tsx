@@ -14,7 +14,10 @@ type Article = {
   intro: string;
   paragraphs: string[];
   image?: string;
+  /** Lifestyle photo for the master card cover (left panel). */
+  cover?: string;
   featured?: boolean;
+  exclusive?: boolean;
   breaking?: boolean;
 };
 
@@ -35,6 +38,8 @@ const articles: Article[] = [
       "Automation should support people, not add complexity. Keep a human review where decisions require judgment, and establish clear ownership before rolling out a new workflow.",
     ],
     image: "/assets/PROCESSAUTOMATION.png",
+    cover: studioImage,
+    featured: true,
     breaking: true,
   },
   {
@@ -64,7 +69,7 @@ const articles: Article[] = [
       "Use analytics to understand where visitors stop. Test one meaningful change at a time and compare outcomes, rather than chasing a redesign without a clear goal.",
     ],
     image: studioImage,
-    featured: true,
+    exclusive: true,
   },
   {
     id: "staffing-hybrid",
@@ -228,9 +233,9 @@ export default function InsightsPage() {
   });
 
   const featured = filtered.find((item) => item.featured) ?? filtered[0];
-  const freshList = filtered.filter((item) => item.id !== featured?.id).slice(0, 5);
-  const stacked = filtered.filter((item) => item.id !== featured?.id).slice(0, 2);
-  const popular = filtered.filter((item) => item.id !== featured?.id).slice(2, 6);
+  const exclusive = filtered.find((item) => item.exclusive) ?? featured;
+  const freshList = filtered.slice(0, 2);
+  const popular = filtered.filter((item) => item.id !== featured?.id).slice(0, 3);
   const breaking = filtered.filter((item) => item.image).slice(0, 4);
   const more = filtered.filter((item) => item.image).slice(4, 8);
 
@@ -272,12 +277,12 @@ export default function InsightsPage() {
         </div>
       </div>
 
-      {featured && (
+      {exclusive && (
         <div className="insights-ticker">
           <div className="section-inner">
             <span>Exclusive</span>
             <p>
-              {featured.title} — {featured.date}
+              {exclusive.title} — {exclusive.date}
             </p>
           </div>
         </div>
@@ -305,26 +310,24 @@ export default function InsightsPage() {
               </div>
 
               {featured && (
-                <button type="button" className="insights-feature" onClick={() => open(featured.id)}>
-                  {featured.image && <img src={featured.image} alt="" />}
-                  <div className="insights-feature-copy">
-                    <span className="insights-tag">{categoryKey(featured.category)}</span>
-                    <h3>{featured.title}</h3>
-                    <p>{featured.intro}</p>
+                <button type="button" className="insights-master" onClick={() => open(featured.id)}>
+                  <div className="insights-master-media">
+                    <img src={featured.cover ?? featured.image ?? studioImage} alt="" />
+                  </div>
+                  <div className="insights-master-panel">
+                    {featured.cover && featured.image && (
+                      <div className="insights-master-graphic">
+                        <img src={featured.image} alt="" />
+                      </div>
+                    )}
+                    <div className="insights-master-copy">
+                      <span className="insights-tag">{categoryKey(featured.category)}</span>
+                      <h3>{featured.title}</h3>
+                      <p>{featured.intro}</p>
+                    </div>
                   </div>
                 </button>
               )}
-
-              <div className="insights-stack">
-                {stacked.map((item) => (
-                  <button key={item.id} type="button" className="insights-stack-item" onClick={() => open(item.id)}>
-                    {item.image && <img src={item.image} alt="" />}
-                    <span className="insights-tag">{categoryKey(item.category)}</span>
-                    <strong>{item.title}</strong>
-                    <p>{item.intro}</p>
-                  </button>
-                ))}
-              </div>
 
               <aside className="insights-popular" aria-labelledby="popular-heading">
                 <h2 id="popular-heading">Popular</h2>

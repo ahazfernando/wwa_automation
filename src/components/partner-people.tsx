@@ -33,7 +33,7 @@ export default function PartnerPeople() {
   const [active, setActive] = useState<string | null>(null);
 
   return (
-    <section className="partners" aria-label="Industry partners">
+    <section id="partners" className="partners" aria-label="Industry partners">
       <div className="partners-orbit" aria-hidden="true" />
       <header className="partners-heading">
         <span className="partners-badge">Industry Partners</span>

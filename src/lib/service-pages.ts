@@ -156,7 +156,7 @@ const pages: Record<string, ServicePageContent> = {
     badge: "Process Automation",
     headline: "Services That Run Your Operations to Peak",
     intro: "Give your team their time back. We connect your systems and simplify the everyday, so the work that repeats no longer depends on someone remembering it.",
-    heroImage: "/assets/e6a13f776fd8c4dbf29e5f47b96633f8.jpg",
+    heroImage: "/assets/e6a13f776fd8c4dbf29e5f47b96633f8.jpg_2K_20261015224103.jpg",
     collage: [art(automationArt), crop(1), crop(6)],
     bands: bandsFor("automation", "Process Automation", 1),
     advantageKicker: "Process Automation",

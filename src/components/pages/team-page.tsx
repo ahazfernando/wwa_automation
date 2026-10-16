@@ -1,15 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Compass, Code2, Users, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import PartnerPeople from "@/components/partner-people";
 import { Button } from "@/components/ui/button";
-
-const disciplines = [
-  [Compass, "Strategy & growth", "Turning business challenges into focused plans and meaningful customer connections."],
-  [Code2, "Technology & execution", "Building connected systems, smarter processes, and better digital experiences."],
-  [Users, "People & partnerships", "Bringing the right expertise together and supporting the relationships that make progress possible."],
-] as const;
 
 export default function TeamPage() {
   return (
@@ -41,38 +35,13 @@ export default function TeamPage() {
             <Link href="/contact?service=Careers" className="tunnel-btn">
               Join the team
             </Link>
-            <a href="#disciplines" className="tunnel-btn is-secondary">
-              How we work
+            <a href="#partners" className="tunnel-btn is-secondary">
+              Meet the team
             </a>
           </div>
         </div>
       </section>
 
-      <div className="section-inner" id="disciplines">
-        <section className="about-story">
-          <div>
-            <span className="eyebrow">THE ROUND TABLE</span>
-            <h2>
-              People who connect
-              <br />
-              the dots.
-            </h2>
-          </div>
-          <p>
-            Our strength is how we work together. Business understanding, technical expertise, and creative thinking
-            come together around your goals.
-          </p>
-        </section>
-        <div className="team-grid">
-          {disciplines.map(([Icon, title, text]) => (
-            <article className="team-card" key={title}>
-              <Icon />
-              <h3>{title}</h3>
-              <p>{text}</p>
-            </article>
-          ))}
-        </div>
-      </div>
       <PartnerPeople />
       <div className="section-inner">
         <section className="team-banner">

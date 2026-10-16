@@ -56,15 +56,6 @@ const differences = [
   },
 ] as const;
 
-const milestones = [
-  { title: "Event", lane: "above", at: 8 },
-  { title: "Event", lane: "below", at: 18 },
-  { title: "Event", lane: "below", at: 38 },
-  { title: "Event", lane: "above", at: 62 },
-  { title: "Event", lane: "below", at: 76 },
-  { title: "Event", lane: "above", at: 88 },
-] as const;
-
 function useExpand<T extends HTMLElement>() {
   const ref = useRef<T>(null);
   const [open, setOpen] = useState(false);
@@ -80,7 +71,7 @@ function useExpand<T extends HTMLElement>() {
       ([entry]) => {
         if (entry?.isIntersecting) setOpen(true);
       },
-      { threshold: 0.32, rootMargin: "0px 0px -8% 0px" },
+      { threshold: 0.12, rootMargin: "0px 0px -6% 0px" },
     );
     observer.observe(node);
     return () => observer.disconnect();
@@ -186,9 +177,18 @@ export default function AboutPage() {
 
       <Expand className="about-purpose">
         <div className="about-expand-frame">
-          <div className="purpose-grid">
-            <article className="purpose-card">
-              <div className="purpose-card-media">
+          <header className="purpose-head">
+            <span className="purpose-kicker">Purpose</span>
+            <h2>
+              The reason we show up,
+              <br />
+              and the future we build toward.
+            </h2>
+          </header>
+
+          <div className="purpose-stack">
+            <article className="purpose-band">
+              <div className="purpose-band-media">
                 <img
                   src="/homesection/mission-melbourne.jpg"
                   alt=""
@@ -196,19 +196,23 @@ export default function AboutPage() {
                   height={1152}
                 />
               </div>
-              <div className="purpose-card-body">
-                <h2>Our Mission</h2>
+              <div className="purpose-band-copy">
+                <span className="purpose-index" aria-hidden="true">
+                  01
+                </span>
+                <h3>Our Mission</h3>
                 <p>
                   To help ambitious businesses turn their goals into action through clear strategy, thoughtful
                   technology, and people who care about the outcome.
                 </p>
-                <Link href="/contact" className="purpose-card-cta">
+                <Link href="/contact" className="purpose-band-cta">
                   Start a conversation
                 </Link>
               </div>
             </article>
-            <article className="purpose-card">
-              <div className="purpose-card-media">
+
+            <article className="purpose-band is-reverse">
+              <div className="purpose-band-media">
                 <img
                   src="/homesection/vision-stream.jpg"
                   alt=""
@@ -216,13 +220,16 @@ export default function AboutPage() {
                   height={1152}
                 />
               </div>
-              <div className="purpose-card-body">
-                <h2>Our Vision</h2>
+              <div className="purpose-band-copy">
+                <span className="purpose-index" aria-hidden="true">
+                  02
+                </span>
+                <h3>Our Vision</h3>
                 <p>
                   A future where people, processes, and technology work together, giving every business the confidence
                   and capability to grow.
                 </p>
-                <Link href="/services" className="purpose-card-cta">
+                <Link href="/services" className="purpose-band-cta">
                   Explore our services
                 </Link>
               </div>
@@ -230,45 +237,6 @@ export default function AboutPage() {
           </div>
         </div>
       </Expand>
-
-      <section className="about-milestones">
-        <header className="about-center">
-          <h2>Milestones Along the Way</h2>
-          <p>The path behind the work, and the point we are building from today.</p>
-        </header>
-        <div className="milestone-board">
-          <div className="milestone-lane is-above">
-            {milestones
-              .filter((item) => item.lane === "above")
-              .map((item) => (
-                <div key={`${item.lane}-${item.at}`} className="milestone-card" style={{ left: `${item.at}%` }}>
-                  {item.title}
-                </div>
-              ))}
-          </div>
-          <div className="milestone-axis" aria-hidden="true">
-            <span>Today</span>
-          </div>
-          <div className="milestone-lane is-below">
-            {milestones
-              .filter((item) => item.lane === "below")
-              .map((item) => (
-                <div key={`${item.lane}-${item.at}`} className="milestone-card" style={{ left: `${item.at}%` }}>
-                  {item.title}
-                </div>
-              ))}
-          </div>
-          <ol className="milestone-list">
-            {milestones.slice(0, 3).map((item) => (
-              <li key={`before-${item.at}`}>{item.title}</li>
-            ))}
-            <li className="is-today">Today</li>
-            {milestones.slice(3).map((item) => (
-              <li key={`after-${item.at}`}>{item.title}</li>
-            ))}
-          </ol>
-        </div>
-      </section>
 
       <section className="about-difference" aria-label="What makes us different">
         <div className="difference-inner">

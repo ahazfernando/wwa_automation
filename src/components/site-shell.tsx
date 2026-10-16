@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, ArrowRight, Asterisk, ChevronDown, Mail, Menu, Phone, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -70,11 +70,34 @@ export function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const featured = serviceMenu.find((item) => item.id === activeService) ?? serviceMenu[0];
+  const closeServicesTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const openServices = () => {
+    if (closeServicesTimer.current) {
+      clearTimeout(closeServicesTimer.current);
+      closeServicesTimer.current = null;
+    }
+    setServicesOpen(true);
+  };
+
+  const scheduleCloseServices = () => {
+    if (closeServicesTimer.current) clearTimeout(closeServicesTimer.current);
+    closeServicesTimer.current = setTimeout(() => {
+      setServicesOpen(false);
+      closeServicesTimer.current = null;
+    }, 120);
+  };
 
   useEffect(() => {
     setServicesOpen(false);
     setOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    return () => {
+      if (closeServicesTimer.current) clearTimeout(closeServicesTimer.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (!servicesOpen) return;
@@ -92,58 +115,67 @@ export function Header() {
   };
 
   return (
-    <header className="site-header">
-      <div className="header-inner" onMouseLeave={() => setServicesOpen(false)}>
-        <Brand logo />
-        <nav className="desktop-nav" aria-label="Main navigation">
-          {navigation.map((item) =>
-            item.href === "/services" ? (
-              <button
-                key={item.href}
-                type="button"
-                className={pathname === item.href ? "nav-link active" : "nav-link"}
-                aria-expanded={servicesOpen}
-                aria-controls="services-menu"
-                onMouseEnter={() => setServicesOpen(true)}
-                onClick={() => setServicesOpen(true)}
-              >
-                {item.label}
-                <ChevronDown aria-hidden="true" />
-              </button>
-            ) : (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={pathname === item.href ? "nav-link active" : "nav-link"}
-              >
-                {item.label}
-              </Link>
-            ),
-          )}
-        </nav>
-        <div className="header-actions">
-          <Link href="/contact" className="header-icon" aria-label="Phone">
-            <Phone />
-          </Link>
-          <Link href="/contact" className="header-icon" aria-label="Email">
-            <Mail />
-          </Link>
-          <Link href="/contact" className="header-contact">
-            Contact Us
-          </Link>
+    <header className={servicesOpen ? "site-header is-services-open" : "site-header"}>
+      <div className="header-shell" onMouseLeave={scheduleCloseServices}>
+        <div className="header-inner">
+          <Brand logo />
+          <nav className="desktop-nav" aria-label="Main navigation">
+            {navigation.map((item) =>
+              item.href === "/services" ? (
+                <button
+                  key={item.href}
+                  type="button"
+                  className={pathname === item.href || servicesOpen ? "nav-link active" : "nav-link"}
+                  aria-expanded={servicesOpen}
+                  aria-controls="services-menu"
+                  aria-haspopup="true"
+                  onMouseEnter={openServices}
+                  onFocus={openServices}
+                  onClick={() => setServicesOpen((current) => !current)}
+                >
+                  {item.label}
+                  <ChevronDown aria-hidden="true" />
+                </button>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={pathname === item.href ? "nav-link active" : "nav-link"}
+                  onMouseEnter={scheduleCloseServices}
+                >
+                  {item.label}
+                </Link>
+              ),
+            )}
+          </nav>
+          <div className="header-actions">
+            <Link href="/contact" className="header-icon" aria-label="Phone">
+              <Phone />
+            </Link>
+            <Link href="/contact" className="header-icon" aria-label="Email">
+              <Mail />
+            </Link>
+            <Link href="/contact" className="header-contact">
+              Contact Us
+            </Link>
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="mobile-menu-button"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <X /> : <Menu />}
+          </Button>
         </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="mobile-menu-button"
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open}
-          onClick={() => setOpen(!open)}
-        >
-          {open ? <X /> : <Menu />}
-        </Button>
         {servicesOpen && (
-          <div className="services-menu" id="services-menu">
+          <div
+            className="services-menu"
+            id="services-menu"
+            onMouseEnter={openServices}
+          >
             <div className="services-menu-card">
               <div className="services-menu-list" role="list">
                 {serviceMenu.map((item) => (
