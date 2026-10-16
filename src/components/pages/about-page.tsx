@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Activity, BarChart3, LayoutGrid, TrendingUp } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import ClientLogos from "@/components/client-logos";
-import { studioImage } from "@/lib/studio";
 
 const industries = [
   {
@@ -188,27 +187,44 @@ export default function AboutPage() {
       <Expand className="about-purpose">
         <div className="about-expand-frame">
           <div className="purpose-grid">
-            <figure className="purpose-panel">
-              <img src={studioImage} alt="" style={{ objectPosition: "18% center" }} />
-            </figure>
-            <article className="purpose-panel">
-              <img src={studioImage} alt="" style={{ objectPosition: "50% center" }} />
-              <div>
+            <article className="purpose-card">
+              <div className="purpose-card-media">
+                <img
+                  src="/homesection/mission-melbourne.jpg"
+                  alt=""
+                  width={2048}
+                  height={1152}
+                />
+              </div>
+              <div className="purpose-card-body">
                 <h2>Our Mission</h2>
                 <p>
                   To help ambitious businesses turn their goals into action through clear strategy, thoughtful
                   technology, and people who care about the outcome.
                 </p>
+                <Link href="/contact" className="purpose-card-cta">
+                  Start a conversation
+                </Link>
               </div>
             </article>
-            <article className="purpose-panel">
-              <img src={studioImage} alt="" style={{ objectPosition: "82% center" }} />
-              <div>
+            <article className="purpose-card">
+              <div className="purpose-card-media">
+                <img
+                  src="/homesection/vision-stream.jpg"
+                  alt=""
+                  width={2048}
+                  height={1152}
+                />
+              </div>
+              <div className="purpose-card-body">
                 <h2>Our Vision</h2>
                 <p>
                   A future where people, processes, and technology work together, giving every business the confidence
                   and capability to grow.
                 </p>
+                <Link href="/services" className="purpose-card-cta">
+                  Explore our services
+                </Link>
               </div>
             </article>
           </div>

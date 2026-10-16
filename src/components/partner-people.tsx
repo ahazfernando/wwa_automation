@@ -36,6 +36,7 @@ export default function PartnerPeople() {
     <section className="partners" aria-label="Industry partners">
       <div className="partners-orbit" aria-hidden="true" />
       <header className="partners-heading">
+        <span className="partners-badge">Industry Partners</span>
         <h2>
           <span className="partners-heading-lead">Partnered with most of the</span>
           <span className="partners-heading-accent">top people at each industry</span>
