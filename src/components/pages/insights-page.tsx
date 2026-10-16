@@ -3,7 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import { Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { studioImage } from "@/lib/studio";
+
+/** Mockup photos from /public/blog for Insights cards. */
+const blogWorkshop = "/blog/team-workshop.jpg";
+const blogCafe = "/blog/cafe-collaboration.jpg";
 
 type Article = {
   id: string;
@@ -37,8 +40,8 @@ const articles: Article[] = [
       "Start with one repeatable workflow. Map its steps, identify the handoffs, and measure how much time it takes. Clear rules and reliable inputs make a process a good candidate for automation.",
       "Automation should support people, not add complexity. Keep a human review where decisions require judgment, and establish clear ownership before rolling out a new workflow.",
     ],
-    image: "/assets/PROCESSAUTOMATION.png",
-    cover: studioImage,
+    image: blogCafe,
+    cover: blogWorkshop,
     featured: true,
     breaking: true,
   },
@@ -54,7 +57,7 @@ const articles: Article[] = [
       "Before choosing a channel, define your audience and what success looks like. A clear offer and a conversion-ready destination matter as much as the source of your traffic.",
       "The two approaches can work together. Insights from paid campaigns can inform content priorities, while useful organic content can strengthen your broader marketing strategy.",
     ],
-    image: "/assets/Purple%20billboard%20trio%20with%20preserved%20branding.png",
+    image: blogCafe,
   },
   {
     id: "visitors-connections",
@@ -68,7 +71,7 @@ const articles: Article[] = [
       "Remove friction from your next step. Keep inquiry forms purposeful, make important information easy to find, and ensure the experience works well on a phone.",
       "Use analytics to understand where visitors stop. Test one meaningful change at a time and compare outcomes, rather than chasing a redesign without a clear goal.",
     ],
-    image: studioImage,
+    image: blogWorkshop,
     exclusive: true,
   },
   {
@@ -83,7 +86,7 @@ const articles: Article[] = [
       "Start with the outcomes you need, then design the mix of onshore leadership and offshore capability around those outcomes.",
       "Culture travels through rhythm: shared standups, documented decisions, and a single source of truth for priorities.",
     ],
-    image: "/assets/Purple%20checklist%20scroll%20and%20donut%20chart%201.png",
+    image: blogCafe,
   },
   {
     id: "it-connected",
@@ -97,7 +100,7 @@ const articles: Article[] = [
       "Start by mapping the journeys that matter: sales, service, finance, and delivery. Then connect the systems that sit underneath those journeys.",
       "A good IT partner reduces noise. Fewer logins, fewer handoffs, and more time spent on work that actually moves the business.",
     ],
-    image: "/assets/MarketingAssets.png",
+    image: blogWorkshop,
   },
   {
     id: "content-that-converts",
@@ -111,7 +114,7 @@ const articles: Article[] = [
       "Pair every piece with a clear next step: a service page, a conversation, or a practical download.",
       "Measure what people finish, not only what they click. Completion is a better signal of trust.",
     ],
-    image: "/assets/industry-hospitality.jpg",
+    image: blogCafe,
   },
   {
     id: "ops-clarity",
@@ -125,7 +128,7 @@ const articles: Article[] = [
       "Simplify first. Remove duplicate steps, unclear owners, and tools that exist only because “we’ve always done it this way.”",
       "Then automate the stable core. Keep humans in the loop where outcomes need care.",
     ],
-    image: "/assets/industry-manufacturing.jpg",
+    image: blogWorkshop,
   },
   {
     id: "local-reputation",
@@ -139,7 +142,7 @@ const articles: Article[] = [
       "Reviews are social proof and product feedback. Respond consistently and treat patterns as improvement opportunities.",
       "A fast, mobile-friendly site turns that attention into inquiries instead of bounce.",
     ],
-    image: "/assets/industry-education.jpg",
+    image: blogCafe,
   },
   {
     id: "talent-onboarding",
@@ -153,7 +156,7 @@ const articles: Article[] = [
       "Pair new hires with a named buddy and a shared checklist so nothing important lives only in someone’s head.",
       "Measure time-to-first-contribution. It’s one of the clearest signals that onboarding is working.",
     ],
-    image: "/assets/industry-automotive.jpg",
+    image: blogWorkshop,
   },
   {
     id: "secure-basics",
@@ -167,7 +170,7 @@ const articles: Article[] = [
       "Patching and backups are unglamorous — and non-negotiable. Test restores, not only backup success messages.",
       "Train people on phishing with real examples from your industry. Awareness is part of the stack.",
     ],
-    image: "/assets/e6a13f776fd8c4dbf29e5f47b96633f8.jpg",
+    image: blogCafe,
   },
   {
     id: "franchise-marketing",
@@ -181,7 +184,7 @@ const articles: Article[] = [
       "Agree on what every location must say — and what they’re free to adapt for their community.",
       "Shared reporting keeps the network honest about what’s working across markets.",
     ],
-    image: "/assets/industry-engineering.jpg",
+    image: blogWorkshop,
   },
   {
     id: "growth-systems",
@@ -195,7 +198,7 @@ const articles: Article[] = [
       "Use one pipeline view so teams stop arguing about whose numbers are “real.”",
       "Iterate weekly on the bottleneck, not monthly on the whole funnel.",
     ],
-    image: studioImage,
+    image: blogCafe,
   },
 ];
 
@@ -312,7 +315,7 @@ export default function InsightsPage() {
               {featured && (
                 <button type="button" className="insights-master" onClick={() => open(featured.id)}>
                   <div className="insights-master-media">
-                    <img src={featured.cover ?? featured.image ?? studioImage} alt="" />
+                    <img src={featured.cover ?? featured.image ?? blogWorkshop} alt="" />
                   </div>
                   <div className="insights-master-panel">
                     {featured.cover && featured.image && (

@@ -10,8 +10,8 @@ export type ServiceBand = {
   eyebrow: string;
   title: string;
   text: string;
-  href: string;
-  cta: string;
+  href?: string;
+  cta?: string;
   image: ServiceMedia;
   treatment?: "cover" | "asset";
 };
@@ -136,24 +136,18 @@ const overview: ServicePageContent = {
       eyebrow: "Services",
       title: "Digital Marketing",
       text: "Be seen by the right people. From the first impression to the next conversion, we turn attention into growth you can measure.",
-      href: "/services?category=marketing",
-      cta: "View service",
       image: art(marketingArt),
     },
     {
       eyebrow: "Services",
       title: "Onshore & Offshore Staffing",
       text: "Great work starts with great people. Build a capable, connected team with specialist talent, wherever your business needs it.",
-      href: "/services?category=staffing",
-      cta: "View service",
       image: crop(2),
     },
     {
       eyebrow: "Services",
       title: "IT Solutions",
       text: "Thoughtfully designed websites, connected business systems, and IT support built for what comes next.",
-      href: "/services?category=technology",
-      cta: "View service",
       image: crop(5),
     },
   ],

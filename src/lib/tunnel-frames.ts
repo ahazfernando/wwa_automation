@@ -70,7 +70,6 @@ export const tunnelStages: readonly TunnelStage[] = [
     progress: "Marketing",
     lines: ["Digital", "Marketing"],
     body: "Be seen by the right people. From your first impression to your next conversion, we turn your brand’s potential into meaningful growth.",
-    cta: { href: "/services?category=marketing", label: "How it can Help you" },
   },
   {
     id: "staffing",
@@ -82,7 +81,6 @@ export const tunnelStages: readonly TunnelStage[] = [
     progress: "Staffing",
     lines: ["Onshore & Offshore", "Staffing"],
     body: "Great work starts with great people. Build a capable, connected team with specialist talent, wherever your business needs it.",
-    cta: { href: "/services?category=offshore", label: "How it can Help you" },
   },
   {
     id: "software",
@@ -95,7 +93,6 @@ export const tunnelStages: readonly TunnelStage[] = [
     progress: "IT Solutions",
     lines: ["IT", "Solutions"],
     body: "Technology that works for you. Thoughtfully designed websites, connected business systems, and IT solutions built for what comes next.",
-    cta: { href: "/services?category=technology", label: "How it can Help you" },
   },
 ];
 

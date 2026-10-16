@@ -52,7 +52,6 @@ export default function ServicesPage() {
   const searchParams = useSearchParams();
   const page = servicePageFor(searchParams.get("category"));
   const railRef = useRef<HTMLDivElement>(null);
-  const [activeOffer, setActiveOffer] = useState<string | null>(null);
   const usesShowcase = page.bands.length > 0 && page.bands.every((band) => band.treatment === "asset");
 
   useEffect(() => {
@@ -114,56 +113,36 @@ export default function ServicesPage() {
 
       {usesShowcase ? (
         <section className="service-showcase" aria-label="Service offerings">
-          <div className="service-showcase-orbit" aria-hidden="true" />
-          <header className="service-showcase-heading">
-            <span className="service-showcase-badge">{page.badge}</span>
-            <h2>
-              <span className="service-showcase-lead">What we can take on</span>
-              <span className="service-showcase-accent">for you.</span>
-            </h2>
-          </header>
-          <div className="service-showcase-carousel">
-            <div className="service-showcase-viewport">
-              <div className="service-showcase-track">
-                {page.bands.map((band) => {
-                  const isOpen = activeOffer === band.title;
-                  return (
-                    <article
-                      key={band.title}
-                      className={isOpen ? "service-showcase-card is-open" : "service-showcase-card"}
-                      onMouseEnter={() => setActiveOffer(band.title)}
-                      onMouseLeave={() => setActiveOffer(null)}
-                      onFocus={() => setActiveOffer(band.title)}
-                      onBlur={() => setActiveOffer(null)}
-                      tabIndex={0}
-                    >
-                      <div className="service-showcase-face">
-                        <div className="service-showcase-glow" aria-hidden="true" />
-                        <div className="service-showcase-photo">
-                          <img src={band.image.src} alt="" />
-                        </div>
-                        <div className="service-showcase-shade" aria-hidden="true" />
-                        <div className="service-showcase-meta">
-                          <strong>{band.title}</strong>
-                          <span>{band.eyebrow}</span>
-                        </div>
-                      </div>
-                      <div className="service-showcase-back">
-                        <div className="service-showcase-back-top">
-                          <strong>{band.title}</strong>
-                          <span>{band.eyebrow}</span>
-                        </div>
-                        <p>{band.text}</p>
-                        <Link href={band.href} className="service-showcase-cta">
-                          {band.cta} <ArrowUpRight aria-hidden="true" />
-                        </Link>
-                      </div>
-                    </article>
-                  );
-                })}
+          <header className="service-showcase-head">
+            <span className="service-showcase-kicker">{page.badge}</span>
+            <div className="service-showcase-head-row">
+              <h2>
+                What we can take on,
+                <br />
+                automation that travels.
+              </h2>
+              <div className="service-showcase-head-aside">
+                <p>
+                  Repeated work, connected systems, and the everyday steps that should run without a chase — so your
+                  team stays with the decisions that still need a person.
+                </p>
+                <Link href={page.advantageHref} className="service-showcase-head-cta">
+                  Talk to us
+                </Link>
               </div>
             </div>
-          </div>
+          </header>
+          <ul className="service-offer-cards">
+            {page.bands.map((band) => (
+              <li className="service-offer-card" key={band.title}>
+                <div className="service-offer-card-copy">
+                  <h3>{band.title}</h3>
+                  <p>{band.text}</p>
+                </div>
+                <img src={band.image.src} alt="" />
+              </li>
+            ))}
+          </ul>
         </section>
       ) : (
         <section className="service-rail" aria-label="Service offerings">
@@ -192,9 +171,11 @@ export default function ServicesPage() {
                     <span className="service-offer-kicker">{band.eyebrow}</span>
                     <h3>{band.title}</h3>
                     <p>{band.text}</p>
-                    <Link href={band.href} className="service-offer-cta">
-                      {band.cta} <ArrowUpRight aria-hidden="true" />
-                    </Link>
+                    {band.href && band.cta ? (
+                      <Link href={band.href} className="service-offer-cta">
+                        {band.cta} <ArrowUpRight aria-hidden="true" />
+                      </Link>
+                    ) : null}
                   </div>
                 </article>
               ))}

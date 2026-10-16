@@ -178,22 +178,33 @@ export function Header() {
           >
             <div className="services-menu-card">
               <div className="services-menu-list" role="list">
-                {serviceMenu.map((item) => (
-                  <Link
-                    key={item.id}
-                    href={`/services?category=${item.id}`}
-                    role="listitem"
-                    className={item.id === featured.id ? "is-active" : undefined}
-                    onMouseEnter={() => setActiveService(item.id)}
-                    onFocus={() => setActiveService(item.id)}
-                    onClick={(event) => {
-                      event.preventDefault();
-                      go(`/services?category=${item.id}`);
-                    }}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
+                {serviceMenu.map((item) =>
+                  item.id === "automation" ? (
+                    <Link
+                      key={item.id}
+                      href={`/services?category=${item.id}`}
+                      role="listitem"
+                      className={item.id === featured.id ? "is-active" : undefined}
+                      onMouseEnter={() => setActiveService(item.id)}
+                      onFocus={() => setActiveService(item.id)}
+                      onClick={(event) => {
+                        event.preventDefault();
+                        go(`/services?category=${item.id}`);
+                      }}
+                    >
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <span
+                      key={item.id}
+                      role="listitem"
+                      className={item.id === featured.id ? "is-active is-disabled" : "is-disabled"}
+                      onMouseEnter={() => setActiveService(item.id)}
+                    >
+                      {item.label}
+                    </span>
+                  ),
+                )}
               </div>
               <div
                 className={
@@ -208,16 +219,20 @@ export function Header() {
                   <span>{featured.title[1]}</span>
                 </h2>
                 <p>{featured.body}</p>
-                <Link
-                  href={`/services?category=${featured.id}`}
-                  className="services-menu-cta"
-                  onClick={(event) => {
-                    event.preventDefault();
-                    go(`/services?category=${featured.id}`);
-                  }}
-                >
-                  View service
-                </Link>
+                {featured.id === "automation" ? (
+                  <Link
+                    href={`/services?category=${featured.id}`}
+                    className="services-menu-cta"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      go(`/services?category=${featured.id}`);
+                    }}
+                  >
+                    View service
+                  </Link>
+                ) : (
+                  <span className="services-menu-cta is-disabled">Coming soon</span>
+                )}
                 <div
                   className={
                     "image" in featured
@@ -264,18 +279,24 @@ export function Header() {
                   <ChevronDown aria-hidden="true" />
                 </button>
                 {servicesMobile &&
-                  serviceMenu.map((service) => (
-                    <Link
-                      key={service.id}
-                      href={`/services?category=${service.id}`}
-                      onClick={(event) => {
-                        event.preventDefault();
-                        go(`/services?category=${service.id}`);
-                      }}
-                    >
-                      {service.label}
-                    </Link>
-                  ))}
+                  serviceMenu.map((service) =>
+                    service.id === "automation" ? (
+                      <Link
+                        key={service.id}
+                        href={`/services?category=${service.id}`}
+                        onClick={(event) => {
+                          event.preventDefault();
+                          go(`/services?category=${service.id}`);
+                        }}
+                      >
+                        {service.label}
+                      </Link>
+                    ) : (
+                      <span key={service.id} className="is-disabled">
+                        {service.label}
+                      </span>
+                    ),
+                  )}
               </div>
             ) : (
               <Link
@@ -345,9 +366,9 @@ export function Footer() {
         <div>
           <span className="footer-label">WHAT WE DO</span>
           <Link href="/services?category=automation">Process automation</Link>
-          <Link href="/services?category=marketing">Digital marketing</Link>
-          <Link href="/services?category=offshore">Onshore & offshore staffing</Link>
-          <Link href="/services?category=technology">IT Solutions</Link>
+          <span className="is-disabled">Digital marketing</span>
+          <span className="is-disabled">Onshore & offshore staffing</span>
+          <span className="is-disabled">IT Solutions</span>
         </div>
         <div>
           <span className="footer-label">GET IN TOUCH</span>
