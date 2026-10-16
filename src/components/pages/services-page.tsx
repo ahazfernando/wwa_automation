@@ -52,6 +52,8 @@ export default function ServicesPage() {
   const searchParams = useSearchParams();
   const page = servicePageFor(searchParams.get("category"));
   const railRef = useRef<HTMLDivElement>(null);
+  const [activeOffer, setActiveOffer] = useState<string | null>(null);
+  const usesShowcase = page.bands.length > 0 && page.bands.every((band) => band.treatment === "asset");
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -110,41 +112,96 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="service-rail" aria-label="Service offerings">
-        <div className="service-rail-head">
-          <div>
-            <span className="service-kicker">{page.badge}</span>
-            <h2>What we can take on for you.</h2>
+      {usesShowcase ? (
+        <section className="service-showcase" aria-label="Service offerings">
+          <div className="service-showcase-orbit" aria-hidden="true" />
+          <header className="service-showcase-heading">
+            <span className="service-showcase-badge">{page.badge}</span>
+            <h2>
+              <span className="service-showcase-lead">What we can take on</span>
+              <span className="service-showcase-accent">for you.</span>
+            </h2>
+          </header>
+          <div className="service-showcase-carousel">
+            <div className="service-showcase-viewport">
+              <div className="service-showcase-track">
+                {page.bands.map((band) => {
+                  const isOpen = activeOffer === band.title;
+                  return (
+                    <article
+                      key={band.title}
+                      className={isOpen ? "service-showcase-card is-open" : "service-showcase-card"}
+                      onMouseEnter={() => setActiveOffer(band.title)}
+                      onMouseLeave={() => setActiveOffer(null)}
+                      onFocus={() => setActiveOffer(band.title)}
+                      onBlur={() => setActiveOffer(null)}
+                      tabIndex={0}
+                    >
+                      <div className="service-showcase-face">
+                        <div className="service-showcase-glow" aria-hidden="true" />
+                        <div className="service-showcase-photo">
+                          <img src={band.image.src} alt="" />
+                        </div>
+                        <div className="service-showcase-shade" aria-hidden="true" />
+                        <div className="service-showcase-meta">
+                          <strong>{band.title}</strong>
+                          <span>{band.eyebrow}</span>
+                        </div>
+                      </div>
+                      <div className="service-showcase-back">
+                        <div className="service-showcase-back-top">
+                          <strong>{band.title}</strong>
+                          <span>{band.eyebrow}</span>
+                        </div>
+                        <p>{band.text}</p>
+                        <Link href={band.href} className="service-showcase-cta">
+                          {band.cta} <ArrowUpRight aria-hidden="true" />
+                        </Link>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </div>
           </div>
-          <div className="service-rail-nav" aria-hidden={page.bands.length < 2}>
-            <button type="button" className="service-rail-btn" aria-label="Previous services" onClick={() => scrollRail(-1)}>
-              <ArrowLeft aria-hidden="true" />
-            </button>
-            <button type="button" className="service-rail-btn" aria-label="Next services" onClick={() => scrollRail(1)}>
-              <ArrowRight aria-hidden="true" />
-            </button>
+        </section>
+      ) : (
+        <section className="service-rail" aria-label="Service offerings">
+          <div className="service-rail-head">
+            <div>
+              <span className="service-kicker">{page.badge}</span>
+              <h2>What we can take on for you.</h2>
+            </div>
+            <div className="service-rail-nav" aria-hidden={page.bands.length < 2}>
+              <button type="button" className="service-rail-btn" aria-label="Previous services" onClick={() => scrollRail(-1)}>
+                <ArrowLeft aria-hidden="true" />
+              </button>
+              <button type="button" className="service-rail-btn" aria-label="Next services" onClick={() => scrollRail(1)}>
+                <ArrowRight aria-hidden="true" />
+              </button>
+            </div>
           </div>
-        </div>
-        <div className="service-rail-viewport" ref={railRef}>
-          <div className="service-rail-track">
-            {page.bands.map((band) => (
-              <article className="service-offer" key={band.title}>
-                <div className="service-offer-media">
-                  <img src={band.image.src} alt="" style={{ objectPosition: band.image.position }} />
-                </div>
-                <div className="service-offer-body">
-                  <span className="service-offer-kicker">{band.eyebrow}</span>
-                  <h3>{band.title}</h3>
-                  <p>{band.text}</p>
-                  <Link href={band.href} className="service-offer-cta">
-                    {band.cta} <ArrowUpRight aria-hidden="true" />
-                  </Link>
-                </div>
-              </article>
-            ))}
+          <div className="service-rail-viewport" ref={railRef}>
+            <div className="service-rail-track">
+              {page.bands.map((band) => (
+                <article className="service-offer" key={band.title}>
+                  <div className="service-offer-media">
+                    <img src={band.image.src} alt="" style={{ objectPosition: band.image.position }} />
+                  </div>
+                  <div className="service-offer-body">
+                    <span className="service-offer-kicker">{band.eyebrow}</span>
+                    <h3>{band.title}</h3>
+                    <p>{band.text}</p>
+                    <Link href={band.href} className="service-offer-cta">
+                      {band.cta} <ArrowUpRight aria-hidden="true" />
+                    </Link>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section className="service-advantage">
         <span className="hero-badge">{page.advantageKicker}</span>

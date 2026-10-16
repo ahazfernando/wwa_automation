@@ -13,6 +13,7 @@ export type ServiceBand = {
   href: string;
   cta: string;
   image: ServiceMedia;
+  treatment?: "cover" | "asset";
 };
 
 export type ServicePageContent = {
@@ -33,6 +34,15 @@ export type ServicePageContent = {
 
 const automationArt = "/clientlogo/ProcessAutomationAssetD1.png";
 const marketingArt = "/assets/Purple%20billboard%20trio%20with%20preserved%20branding.png";
+const automationPortalArt = "/processautomation/automation-workflow.jpg";
+
+const automationAssets: Record<string, string> = {
+  "Workflow Automation": "/processautomation/automation-workflow.jpg",
+  "CRM & Sales Automation": "/processautomation/automation-crm.jpg",
+  "Email & Communication Automation": "/processautomation/automation-email.jpg",
+  "AI & Chatbot Automation": "/processautomation/automation-ai.jpg",
+  "Finance & Accounting Automation": "/processautomation/automation-finance.jpg",
+};
 
 const itemCopy = {
   "Workflow Automation": "The repeated steps between teams, connected so the work moves without a manual chase.",
@@ -86,13 +96,17 @@ function discuss(title: string): Pick<ServiceBand, "href" | "cta"> {
 function bandsFor(groupId: (typeof serviceGroups)[number]["id"], eyebrow: string, start: number): ServiceBand[] {
   const group = serviceGroups.find((item) => item.id === groupId);
   if (!group) return [];
-  return group.items.map((title, index) => ({
-    eyebrow,
-    title,
-    text: itemCopy[title],
-    image: crop(start + index),
-    ...discuss(title),
-  }));
+  return group.items.map((title, index) => {
+    const asset = groupId === "automation" ? automationAssets[title] : undefined;
+    return {
+      eyebrow,
+      title,
+      text: itemCopy[title],
+      image: asset ? art(asset) : crop(start + index),
+      treatment: asset ? ("asset" as const) : ("cover" as const),
+      ...discuss(title),
+    };
+  });
 }
 
 export const serviceReasons = [
@@ -115,7 +129,8 @@ const overview: ServicePageContent = {
       text: "Give your team their time back. We connect your systems and simplify the everyday, so you can focus on the work that needs a person.",
       href: "/services?category=automation",
       cta: "View service",
-      image: art(automationArt),
+      image: art(automationPortalArt),
+      treatment: "asset",
     },
     {
       eyebrow: "Services",
